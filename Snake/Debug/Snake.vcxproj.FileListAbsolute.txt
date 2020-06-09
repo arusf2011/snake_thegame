@@ -1,0 +1,5 @@
+C:\Users\macie\Desktop\Snake\Debug\Snake.vcxprojAssemblyReference.cache
+C:\Users\macie\Desktop\Snake\Debug\Snake.MyForm.resources
+C:\Users\macie\Desktop\Snake\Debug\Snake.vcxproj.GenerateResource.cache
+C:\Users\macie\Desktop\Snake\Debug\Snake.exe
+C:\Users\macie\Desktop\Snake\Debug\Snake.pdb
