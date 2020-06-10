@@ -1,8 +1,7 @@
 #pragma once
-#include <iostream>
 #include <windows.h>
 
-bool instr=0, ext=0;
+void mainBis();
 
 namespace Snake {
 
@@ -42,6 +41,8 @@ namespace Snake {
 	protected:
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::Button^ button3;
+	private: System::Windows::Forms::Button^ button4;
+
 
 	private:
 		/// <summary>
@@ -60,6 +61,7 @@ namespace Snake {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// button1
@@ -84,7 +86,7 @@ namespace Snake {
 			// 
 			// button3
 			// 
-			this->button3->Location = System::Drawing::Point(80, 310);
+			this->button3->Location = System::Drawing::Point(80, 370);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(175, 40);
 			this->button3->TabIndex = 2;
@@ -92,12 +94,23 @@ namespace Snake {
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
 			// 
+			// button4
+			// 
+			this->button4->Location = System::Drawing::Point(80, 310);
+			this->button4->Name = L"button4";
+			this->button4->Size = System::Drawing::Size(175, 40);
+			this->button4->TabIndex = 3;
+			this->button4->Text = L"O autorach";
+			this->button4->UseVisualStyleBackColor = true;
+			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(700, 525);
+			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
@@ -122,17 +135,13 @@ namespace Snake {
 		Graj->Height = 525;
 		Graj->Text = "Snake - the game";
 		Graj->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-		MainBis();
+		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
+		Graj->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+		mainBis();
 		Graj->Show();
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		/*MessageBox::Show(
-			"zawartoœæ tekstowa instrukcji",
-			"Instrukcja",
-			MessageBoxButtons::OK
-		);*/
-
 		Form^ Instrukcja = gcnew Form;
 		Instrukcja->Width = 700;
 		Instrukcja->Height = 525;
@@ -142,12 +151,16 @@ namespace Snake {
 		Instrukcja->MinimizeBox = false;
 		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 		Instrukcja->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
+		Instrukcja->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 		Button^ przycisk = gcnew Button;
-		przycisk->Text = "OK";
+		przycisk->Text = "Powrót";
 		przycisk->Location = Point(150, 420);
 		przycisk->Size = System::Drawing::Size(130, 35);
 		Instrukcja->Controls->Add(przycisk);
-		Instrukcja->Show();
+
+		przycisk->DialogResult = System::Windows::Forms::DialogResult::OK;
+		Instrukcja->ShowDialog();
+		Instrukcja->Close();
 	}
 	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 			System::Windows::Forms::DialogResult odp =
@@ -160,5 +173,37 @@ namespace Snake {
 		}
 	}
 
+private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+	Label^ info1 = gcnew Label;
+	info1->Text = "Autorzy:\nArkadiusz Fatyga\nMaciej Jurczyk\n\n\nProgram zosta³ wykonany w ramach zaliczenia przedmiotu Programowanie 2, wydz.Matematyka Stosowana, POL ŒL.\n\nWszelkie prawa zgodnie z licencj¹ MIT.\n\nCzerwiec 2020 r.";
+	info1->Location = Point(40, 145);
+	info1->Size = System::Drawing::Size(350, 400);
+	info1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 13, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+		static_cast<System::Byte>(238)));
+	info1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(253)), static_cast<System::Int32>(static_cast<System::Byte>(236)),
+		static_cast<System::Int32>(static_cast<System::Byte>(166)));
+
+	Form^ Autorzy = gcnew Form;
+	Autorzy->Width = 700;
+	Autorzy->Height = 525;
+	Autorzy->Text = "Snake - the game";
+	Autorzy->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
+	Autorzy->MaximizeBox = false;
+	Autorzy->MinimizeBox = false;
+	System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
+	Autorzy->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+	Autorzy->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
+	
+	Button^ przycisk = gcnew Button;
+	przycisk->Text = "Powrót";
+	przycisk->Location = Point(150, 420);
+	przycisk->Size = System::Drawing::Size(130, 35);
+	przycisk->DialogResult = System::Windows::Forms::DialogResult::OK;
+
+	Autorzy->Controls->Add(przycisk);
+	Autorzy->Controls->Add(info1);
+	Autorzy->ShowDialog();
+	Autorzy->Close();
+}
 };
 }

@@ -6,8 +6,6 @@ using namespace Snake;
 
 [STAThreadAttribute]
 
-void MainBis();
-
 int main(array <System::String^>^ args)
 {
 	Application::EnableVisualStyles();
