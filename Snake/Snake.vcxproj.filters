@@ -40,12 +40,21 @@
     <ClCompile Include="MyForm.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="MainBis.cpp">
+    <ClCompile Include="Move.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="snake.bmp">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="bg_game.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="app_icon.png">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>

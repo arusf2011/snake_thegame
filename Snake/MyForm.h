@@ -1,16 +1,19 @@
 #pragma once
 #include <windows.h>
+#include <SFML/Graphics.hpp>
+#include <time.h>
 
-void mainBis();
+void move(float [100][2],int, float [2],int*); // funkcja odpowiadaj¹ca za ruch wê¿a
+
 
 namespace Snake {
-
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace sf;
 
 	/// <summary>
 	/// Podsumowanie informacji o MyForm
@@ -18,6 +21,7 @@ namespace Snake {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
+		int score, direction; // wynik
 		MyForm(void)
 		{
 			InitializeComponent();
@@ -130,15 +134,74 @@ namespace Snake {
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		Form^ Graj = gcnew Form;
-		Graj->Width = 700;
-		Graj->Height = 525;
-		Graj->Text = "Snake - the game";
-		Graj->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
+		/*
+		 * Tutaj jest kod gry (u¿yciem biblioteki SFML 2.5.1)
+		 */
+		srand((unsigned)time(NULL));
 		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-		Graj->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-		mainBis();
-		Graj->Show();
+		RenderWindow gameWindow(VideoMode(700, 525), "Snake - the game");
+		sf::Image icon;
+		icon.loadFromFile("app_icon.png");
+		gameWindow.setIcon(171, 153, icon.getPixelsPtr());
+		Texture snake_t;
+		snake_t.loadFromFile("snake.bmp");
+		Texture snake_bg_t;
+		snake_bg_t.loadFromFile("snake_bg.bmp");
+		Sprite snake_s(snake_t);
+		Sprite snake_bg_s(snake_bg_t);
+		Clock snake_stoper;
+		float timer = 0, delay = 0.1;
+		float s_coor[100][2];
+		s_coor[0][0] = 0;
+		s_coor[0][1] = 0;
+		float f[2];
+		f[0] = 25;
+		f[1] = 25;
+		int* p_score;
+		p_score = &score;
+		while (gameWindow.isOpen())
+		{
+			float running_time = snake_stoper.getElapsedTime().asSeconds();
+			snake_stoper.restart();
+			timer += running_time;
+
+			Event event_snake;
+			while (gameWindow.pollEvent(event_snake))
+			{
+				if (event_snake.type == Event::Closed)
+					gameWindow.close();
+
+			} //while
+
+			if (Keyboard::isKeyPressed(Keyboard::Down)) direction = 0;
+			if (Keyboard::isKeyPressed(Keyboard::Left)) direction = 1;
+			if (Keyboard::isKeyPressed(Keyboard::Up)) direction = 2;
+			if (Keyboard::isKeyPressed(Keyboard::Right)) direction = 3;
+
+			gameWindow.clear();
+
+			if (timer > delay) { timer = 0; move(s_coor,direction,f,p_score); }
+			
+			for (int i = 0; i < 28; i++)
+			{
+				for (int j = 0; j < 21; j++)
+				{
+					snake_bg_s.setPosition(i * 25, j * 25);
+					gameWindow.draw(snake_bg_s);
+				}
+			}
+			
+			for (int i = 0; i < score+1; i++)
+			{
+				snake_s.setPosition(s_coor[i][1], s_coor[i][0]);
+				gameWindow.draw(snake_s);
+			}
+
+			snake_s.setPosition(f[1], f[0]);
+			gameWindow.draw(snake_s);
+
+			gameWindow.display();
+		}
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -147,8 +210,7 @@ namespace Snake {
 		Instrukcja->Height = 525;
 		Instrukcja->Text = "Snake - the game";
 		Instrukcja->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-		Instrukcja->MaximizeBox = false;
-		Instrukcja->MinimizeBox = false;
+		Instrukcja->ControlBox = false;
 		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 		Instrukcja->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 		Instrukcja->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
