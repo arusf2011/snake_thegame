@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 
-void move(float [100][2],int, float [2],int*); // funkcja odpowiadaj¹ca za ruch wê¿a
+void move(float [100][2],int, float [2],cli::interior_ptr<int>); // funkcja odpowiadaj¹ca za ruch wê¿a
 
 
 namespace Snake {
@@ -22,6 +22,7 @@ namespace Snake {
 	{
 	public:
 		int score, direction; // wynik
+		bool error = false;
 		MyForm(void)
 		{
 			InitializeComponent();
@@ -137,7 +138,7 @@ namespace Snake {
 		/*
 		 * Tutaj jest kod gry (u¿yciem biblioteki SFML 2.5.1)
 		 */
-		srand((unsigned)time(NULL));
+		srand((unsigned)time(0));
 		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 		RenderWindow gameWindow(VideoMode(700, 525), "Snake - the game");
 		sf::Image icon;
@@ -150,15 +151,17 @@ namespace Snake {
 		Sprite snake_s(snake_t);
 		Sprite snake_bg_s(snake_bg_t);
 		Clock snake_stoper;
+		MyForm^ h_MyForm = gcnew MyForm;
+		h_MyForm->score = 0;
 		float timer = 0, delay = 0.1;
 		float s_coor[100][2];
 		s_coor[0][0] = 0;
 		s_coor[0][1] = 0;
 		float f[2];
-		f[0] = 25;
-		f[1] = 25;
-		int* p_score;
-		p_score = &score;
+		f[0] = 1;
+		f[1] = 1;
+		interior_ptr<int> p_score;
+		p_score = &(h_MyForm->score);
 		while (gameWindow.isOpen())
 		{
 			float running_time = snake_stoper.getElapsedTime().asSeconds();
@@ -181,7 +184,7 @@ namespace Snake {
 			gameWindow.clear();
 
 			if (timer > delay) { timer = 0; move(s_coor,direction,f,p_score); }
-			
+
 			for (int i = 0; i < 28; i++)
 			{
 				for (int j = 0; j < 21; j++)
@@ -191,15 +194,98 @@ namespace Snake {
 				}
 			}
 			
-			for (int i = 0; i < score+1; i++)
+			for (int i = 0; i < h_MyForm->score+1; i++)
 			{
-				snake_s.setPosition(s_coor[i][1], s_coor[i][0]);
+				snake_s.setPosition(s_coor[i][1]*25, s_coor[i][0]*25);
 				gameWindow.draw(snake_s);
 			}
 
-			snake_s.setPosition(f[1], f[0]);
+			snake_s.setPosition(f[1]*25, f[0]*25);
 			gameWindow.draw(snake_s);
 
+			// Koniec gry - wygrana
+			if (h_MyForm->score == 100)
+			{
+				sf::VertexArray bg_winText(sf::Quads, 4);
+				bg_winText[0].position = sf::Vector2f(225.f, 250.f);
+				bg_winText[1].position = sf::Vector2f(475.f, 250.f);
+				bg_winText[2].position = sf::Vector2f(475.f, 350.f);
+				bg_winText[3].position = sf::Vector2f(225.f, 350.f);
+				bg_winText[0].color = sf::Color(204, 204, 204);
+				bg_winText[1].color = sf::Color(204, 204, 204);
+				bg_winText[2].color = sf::Color(204, 204, 204);
+				bg_winText[3].color = sf::Color(204, 204, 204);
+				gameWindow.draw(bg_winText);
+				sf::Font font_Win;
+				font_Win.loadFromFile("OpenSans-Regular.ttf");
+				sf::Text winText1;
+				winText1.setString("Gratulacje!");
+				winText1.setStyle(sf::Text::Bold);
+				winText1.setFont(font_Win);
+				winText1.setCharacterSize(24);
+				winText1.setFillColor(sf::Color::Black);
+				winText1.setPosition(290.f, 250.f);
+				gameWindow.draw(winText1);
+				sf::Text winText2;
+				winText2.setString(L"Zdoby³eœ 100 punktów!");
+				winText2.setFont(font_Win);
+				winText2.setCharacterSize(20);
+				winText2.setFillColor(sf::Color::Black);
+				winText2.setPosition(240.f, 280.f);
+				gameWindow.draw(winText2);
+				sf::Text winText3;
+				winText3.setString(L"Mo¿esz zamkn¹æ to okno.");
+				winText3.setFont(font_Win);
+				winText3.setCharacterSize(20);
+				winText3.setFillColor(sf::Color::Black);
+				winText3.setPosition(230.f, 310.f);
+				gameWindow.draw(winText3);
+			}
+			// Koniec gry - przegrana
+			for (int i = 1; i < h_MyForm->score + 1; i++)
+			{
+				if ((s_coor[0][0] == s_coor[i][0]) && (s_coor[0][1] == s_coor[i][1]))
+				{
+					error = true;
+				}
+			}
+			if (error)
+			{
+				sf::VertexArray bg_loseText(sf::Quads, 4);
+				bg_loseText[0].position = sf::Vector2f(225.f, 250.f);
+				bg_loseText[1].position = sf::Vector2f(475.f, 250.f);
+				bg_loseText[2].position = sf::Vector2f(475.f, 350.f);
+				bg_loseText[3].position = sf::Vector2f(225.f, 350.f);
+				bg_loseText[0].color = sf::Color(204, 204, 204);
+				bg_loseText[1].color = sf::Color(204, 204, 204);
+				bg_loseText[2].color = sf::Color(204, 204, 204);
+				bg_loseText[3].color = sf::Color(204, 204, 204);
+				gameWindow.draw(bg_loseText);
+				sf::Font font_Lose;
+				font_Lose.loadFromFile("OpenSans-Regular.ttf");
+				sf::Text loseText1;
+				loseText1.setString("Koniec gry!");
+				loseText1.setStyle(sf::Text::Bold);
+				loseText1.setFont(font_Lose);
+				loseText1.setCharacterSize(24);
+				loseText1.setFillColor(sf::Color::Black);
+				loseText1.setPosition(280.f, 250.f);
+				gameWindow.draw(loseText1);
+				sf::Text loseText2;
+				loseText2.setString(L"Zdoby³eœ/-aœ "+ std::to_string(h_MyForm->score)+" punktów!");
+				loseText2.setFont(font_Lose);
+				loseText2.setCharacterSize(20);
+				loseText2.setFillColor(sf::Color::Black);
+				loseText2.setPosition(235.f, 280.f);
+				gameWindow.draw(loseText2);
+				sf::Text loseText3;
+				loseText3.setString(L"Mo¿esz zamkn¹æ to okno.");
+				loseText3.setFont(font_Lose);
+				loseText3.setCharacterSize(20);
+				loseText3.setFillColor(sf::Color::Black);
+				loseText3.setPosition(230.f, 310.f);
+				gameWindow.draw(loseText3);
+			}
 			gameWindow.display();
 		}
 	}
