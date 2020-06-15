@@ -29,14 +29,14 @@ void move(float s_coor[100][2], int direction, float f[2], cli::interior_ptr<int
 	}
 
 	// Nieskonczone przewijanie
-	if (s_coor[0][0] > 21)
+	if (s_coor[0][0] > 20)
 		s_coor[0][0] = 0;
 	else if (s_coor[0][0] < 0)
-		s_coor[0][0] = 21;
-	if (s_coor[0][1] > 28)
+		s_coor[0][0] = 20;
+	if (s_coor[0][1] > 27)
 		s_coor[0][1] = 0;
 	else if (s_coor[0][1] < 0)
-		s_coor[0][1] = 28;
+		s_coor[0][1] = 27;
 
 
 }

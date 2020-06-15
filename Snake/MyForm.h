@@ -124,8 +124,7 @@ namespace Snake {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
-			this->MaximizeBox = false;
-			this->MinimizeBox = false;
+			this->ControlBox = false;
 			this->Name = L"MyForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Snake - the game";
@@ -300,11 +299,20 @@ namespace Snake {
 		System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 		Instrukcja->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 		Instrukcja->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
+		Label^ Instrukcja_text = gcnew Label;
+		Instrukcja_text->Text = "Gra polega na zbieraniu punktów.\nJeœli uzbierzesz 100 punktów - wygrywasz.\nJeœli najedziesz sam na siebie - przegrywasz.\nSterowanie wê¿em:\nStrza³ka w górê - ustawienie kierunku wê¿a do góry\nStrza³ka w dó³ - ustawienie kierunku wê¿a w dó³\nStrza³ka w lewo - ustawienie kierunku wê¿a w lewo\nStrza³ka w prawo - ustawienie kierunku wê¿a w prawo";
+		Instrukcja_text->Location = Point(40, 145);
+		Instrukcja_text->Size = System::Drawing::Size(350, 400);
+		Instrukcja_text->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(238)));
+		Instrukcja_text->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(253)), static_cast<System::Int32>(static_cast<System::Byte>(236)),
+			static_cast<System::Int32>(static_cast<System::Byte>(166)));
 		Button^ przycisk = gcnew Button;
 		przycisk->Text = "Powrót";
 		przycisk->Location = Point(150, 420);
 		przycisk->Size = System::Drawing::Size(130, 35);
 		Instrukcja->Controls->Add(przycisk);
+		Instrukcja->Controls->Add(Instrukcja_text);
 
 		przycisk->DialogResult = System::Windows::Forms::DialogResult::OK;
 		Instrukcja->ShowDialog();
@@ -336,8 +344,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	Autorzy->Height = 525;
 	Autorzy->Text = "Snake - the game";
 	Autorzy->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-	Autorzy->MaximizeBox = false;
-	Autorzy->MinimizeBox = false;
+	Autorzy->ControlBox = false;
 	System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 	Autorzy->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 	Autorzy->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
