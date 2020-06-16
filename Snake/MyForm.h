@@ -171,6 +171,7 @@ namespace Snake {
 			while (gameWindow.pollEvent(event_snake))
 			{
 				if (event_snake.type == Event::Closed)
+					error = false;
 					gameWindow.close();
 
 			} //while
